@@ -1,7 +1,10 @@
 {
-  "name": "fathom-clone",
+  "name": "winorra-global",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -15,31 +18,26 @@
     "@types/three": "^0.168.0",
     "clsx": "^2.1.1",
     "framer-motion": "^11.2.10",
-    "glob": "^13.0.6",
     "gsap": "^3.12.5",
     "lucide-react": "^0.395.0",
     "next": "14.2.15",
     "react": "^18",
     "react-dom": "^18",
     "tailwind-merge": "^2.3.0",
-    "three": "^0.168.0",
-    "three-mesh-bvh": "^0.8.0"
+    "three": "^0.168.0"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.4.19",
-    "eslint": "^8.57.1",
+    "eslint": "8.57.1",
     "eslint-config-next": "14.2.15",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   },
   "overrides": {
-    "glob": "^13.0.6",
-    "three-mesh-bvh": "^0.8.0",
-    "eslint": "^8.57.1",
-    "next": "14.2.15"
+    "eslint": "8.57.1"
   }
 }
