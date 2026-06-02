@@ -80,9 +80,11 @@ const TrustedBrandsSection = () => {
           <div className="animate-marquee items-center justify-around">
             {logos.map((logo, idx) => (
               <div key={`logo-1-${idx}`} className="mx-8 md:mx-12 lg:mx-16 flex-shrink-0">
-                <img 
+                <Image 
                   src={`/logos/${logo}`} 
                   alt="Brand Logo" 
+                  width={200}
+                  height={80}
                   className="h-8 md:h-12 w-auto max-w-none object-contain grayscale opacity-50 mix-blend-multiply hover:grayscale-0 hover:opacity-100 hover:scale-110 transition-all duration-300 cursor-pointer"
                 />
               </div>
@@ -93,9 +95,11 @@ const TrustedBrandsSection = () => {
           <div className="animate-marquee items-center justify-around" aria-hidden="true">
             {logos.map((logo, idx) => (
               <div key={`logo-2-${idx}`} className="mx-8 md:mx-12 lg:mx-16 flex-shrink-0">
-                <img 
+                <Image 
                   src={`/logos/${logo}`} 
                   alt="Brand Logo" 
+                  width={200}
+                  height={80}
                   className="h-8 md:h-12 w-auto max-w-none object-contain grayscale opacity-50 mix-blend-multiply hover:grayscale-0 hover:opacity-100 hover:scale-110 transition-all duration-300 cursor-pointer"
                 />
               </div>

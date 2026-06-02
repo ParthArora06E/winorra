@@ -107,7 +107,7 @@ const Footer = () => {
           href="/plan"
           className="absolute right-4 bottom-4 md:right-[24px] md:bottom-[32px] lg:right-[34px] lg:bottom-[32px] w-[60px] h-[60px] md:w-[70px] md:h-[70px] lg:w-[86px] lg:h-[86px] bg-[#1d3f9e] rounded-full flex flex-col items-center justify-center text-white font-[900] text-[11px] md:text-[13px] leading-[1.1] text-center shadow-xl hover:scale-105 transition-transform z-50"
         >
-          <span>LET'S</span>
+          <span>LET&apos;S</span>
           <span>PLAN!</span>
         </Link>
       </div>

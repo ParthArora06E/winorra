@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef } from "react";
+import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 
 const About = () => {
@@ -16,10 +17,11 @@ const About = () => {
     <section ref={containerRef} className="relative bg-black py-32 md:py-48 px-4 overflow-hidden border-t border-white/5">
       {/* Image Background with Parallax */}
       <motion.div style={{ y }} className="absolute inset-0 z-0">
-        <img 
+        <Image 
           src="/images/corporate-bg.png" 
           alt="Corporate Event" 
-          className="w-full h-full object-cover opacity-40 contrast-110"
+          fill
+          className="object-cover opacity-40 contrast-110"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black via-black/80 to-black" />
       </motion.div>
@@ -70,7 +72,7 @@ const About = () => {
             transition={{ delay: 0.8, duration: 1 }}
             className="text-[12px] md:text-[14px] tracking-[0.4em] font-bold text-white uppercase mt-8 drop-shadow-md"
           >
-            Experience Creators <span className="mx-4 text-white/50">//</span> Festival Producers
+            Experience Creators <span className="mx-4 text-white/50">{"//"}</span> Festival Producers
           </motion.p>
         </motion.div>
 
