@@ -50,7 +50,7 @@ export default function AboutHeroSection() {
           className="text-white font-black uppercase text-[11px] md:text-[14px] lg:text-[16px] tracking-[4px] md:tracking-[8px] mb-8 md:mb-10 flex flex-col md:flex-row items-center gap-2 md:gap-4"
         >
           <span className="drop-shadow-md">EXPERIENCE CREATORS</span> 
-          <span className="hidden md:inline text-[#91bf3e] font-sans font-light drop-shadow-md">//</span> 
+          <span className="hidden md:inline text-[#91bf3e] font-sans font-light drop-shadow-md">{"//"}</span> 
           <span className="text-[#91bf3e] drop-shadow-[0_0_10px_rgba(145,191,62,0.5)]">EVENT PRODUCERS</span>
         </motion.h3>
 

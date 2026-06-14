@@ -249,7 +249,7 @@ const Footer = () => {
                   <X size={20} />
                 </button>
                 <div className="relative z-10">
-                  <h3 className="text-white text-[32px] md:text-[36px] font-black leading-tight mb-2 tracking-tight">Let's Plan<br/>Something <span className="text-[#91bf3e]">Epic.</span></h3>
+                  <h3 className="text-white text-[32px] md:text-[36px] font-black leading-tight mb-2 tracking-tight">Let&apos;s Plan<br/>Something <span className="text-[#91bf3e]">Epic.</span></h3>
                   <p className="text-white/80 text-[15px] font-medium">Fill out the details below and our team will get back to you shortly.</p>
                 </div>
               </div>
