@@ -15,7 +15,7 @@ export default function CustomEditorialSection() {
             {/* Flow Content (Invisible, sets the layout size) */}
             <h1 
               className="font-heading font-black uppercase tracking-[-0.04em] leading-[0.8] text-left opacity-0 pointer-events-none pr-4 lg:pr-8"
-              style={{ fontSize: 'clamp(3rem, 10vw, 135px)' }}
+              style={{ fontSize: 'clamp(2rem, 12vw, 135px)' }}
             >
               CREATING<br />
               AMAZING<br />
@@ -41,7 +41,7 @@ export default function CustomEditorialSection() {
             <div className="absolute inset-0 bg-white mix-blend-screen pointer-events-none z-10 flex flex-col justify-start">
               <h1 
                 className="font-heading font-black uppercase tracking-[-0.04em] leading-[0.8] text-left text-black pr-4 lg:pr-8"
-                style={{ fontSize: 'clamp(3rem, 10vw, 135px)' }}
+                style={{ fontSize: 'clamp(2rem, 12vw, 135px)' }}
               >
                 CREATING<br />
                 AMAZING<br />
@@ -56,7 +56,7 @@ export default function CustomEditorialSection() {
               <h1 
                 className="font-heading font-black uppercase tracking-[-0.04em] leading-[0.8] text-left text-transparent pr-4 lg:pr-8"
                 style={{ 
-                  fontSize: 'clamp(3rem, 10vw, 135px)',
+                  fontSize: 'clamp(2rem, 12vw, 135px)',
                   WebkitTextStroke: '1px rgba(0,0,0,0.1)'
                 }}
               >

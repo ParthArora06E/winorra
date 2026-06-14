@@ -32,10 +32,13 @@ const Hero = () => {
         >
           {/* WINORAA GLOBAL */}
           <div className="text-center flex flex-col items-center justify-center">
-            <h1 className="text-white font-black tracking-[-0.05em] leading-[0.8] mb-6 opacity-95 text-4xl md:text-6xl lg:text-[7rem]">
+            <h1 
+              className="text-white font-black tracking-[-0.05em] leading-[0.8] opacity-95 mb-4"
+              style={{ fontSize: 'clamp(32px, 10vw, 112px)' }}
+            >
               WINORAA GLOBAL
             </h1>
-            <p className="text-[12px] md:text-[14px] tracking-[0.6em] font-medium opacity-90 uppercase whitespace-nowrap text-center">
+            <p className="text-[12px] md:text-[14px] tracking-[0.6em] ml-[0.6em] font-medium opacity-90 uppercase whitespace-nowrap text-center text-white">
               Events and Experiences
             </p>
           </div>
@@ -45,7 +48,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8, duration: 1 }}
-            className="flex flex-wrap justify-center items-center gap-10 md:gap-24 mt-20"
+            className="flex flex-wrap justify-center items-center gap-6 md:gap-16 lg:gap-24 mt-12 md:mt-20 px-4"
           >
             {[
               { val: 50, label: "EVENTS PRODUCED" },
@@ -53,7 +56,7 @@ const Hero = () => {
               { val: 3, label: "YEARS EXPERIENCE" }
             ].map((stat, i) => (
               <div key={i} className="flex flex-col items-center">
-                <span className="text-3xl md:text-5xl font-bold text-white mb-2 tracking-tight">
+                <span className="text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-1 md:mb-2 tracking-tight">
                   <CountUp value={stat.val} />+
                 </span>
                 <span className="text-[9px] md:text-[10px] tracking-[0.3em] font-semibold text-white/80 uppercase">

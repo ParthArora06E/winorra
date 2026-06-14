@@ -30,7 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${inter.variable} ${permanentMarker.variable} ${montserrat.variable} antialiased bg-black text-white`}>
+      <body className={`${inter.variable} ${permanentMarker.variable} ${montserrat.variable} antialiased bg-black text-white overflow-x-hidden`}>
         <SmoothScroll />
         <Navbar />
         <Overlays />

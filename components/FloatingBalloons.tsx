@@ -28,23 +28,11 @@ const FloatingBalloons = () => {
         delay: -delay,
       });
 
-      // Subtle parallax on mouse move
-      const handleMouseMove = (e: MouseEvent) => {
-        const { clientX, clientY } = e;
-        const xPos = (clientX / window.innerWidth - 0.5) * 50;
-        const yPos = (clientY / window.innerHeight - 0.5) * 50;
-        
-        gsap.to(balloon, {
-          x: `+=${xPos * (Math.random() * 0.5)}`,
-          y: `+=${yPos * (Math.random() * 0.5)}`,
-          duration: 1,
-          ease: "power2.out",
-        });
-      };
-
-      window.addEventListener("mousemove", handleMouseMove);
-      return () => window.removeEventListener("mousemove", handleMouseMove);
     });
+
+    return () => {
+      gsap.killTweensOf(balloons);
+    };
   }, []);
 
   return (

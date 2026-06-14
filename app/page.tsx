@@ -3,7 +3,6 @@ import Hero from "@/components/Hero";
 import TrustedBrandsSection from "@/components/TrustedBrandsSection";
 import CustomEditorialSection from "@/components/CustomEditorialSection";
 import AboutHeroSection from "@/components/AboutHeroSection";
-import WinorraBannerSection from "@/components/WinorraBannerSection";
 import ServicesSection from "@/components/ServicesSection";
 import dynamic from "next/dynamic";
 
@@ -20,7 +19,6 @@ export default function Home() {
         <Hero />
         <CustomEditorialSection />
         <AboutHeroSection />
-        <WinorraBannerSection />
         <ServicesSection />
         <GlobalNetwork />
         <TrustedBrandsSection />

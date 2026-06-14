@@ -10,8 +10,9 @@ const logos = [
   "2025-12-30_18_20_15-images_-_Antigravity_-_script.js-removebg-preview.png",
   "2025-12-30_18_22_42-images_-_Antigravity_-_script.js-removebg-preview.png",
   "467735332_569220405701299_6205380545285116017_n-removebg-preview.png",
-  "5.png",
-  "6.png"
+  "1.png",
+  "cf228243-da69-4d66-907e-3cd8c652043c-removebg-preview.png",
+  "18354053-9c92-4523-ae88-462c897fd9a9-removebg-preview.png"
 ];
 
 const TrustedBrandsSection = () => {
@@ -83,9 +84,9 @@ const TrustedBrandsSection = () => {
                 <Image 
                   src={`/logos/${logo}`} 
                   alt="Brand Logo" 
-                  width={200}
-                  height={80}
-                  className="h-8 md:h-12 w-auto max-w-none object-contain grayscale opacity-50 mix-blend-multiply hover:grayscale-0 hover:opacity-100 hover:scale-110 transition-all duration-300 cursor-pointer"
+                  width={300}
+                  height={120}
+                  className="h-12 md:h-16 lg:h-20 w-auto max-w-none object-contain grayscale opacity-50 mix-blend-multiply hover:grayscale-0 hover:opacity-100 hover:scale-110 transition-all duration-300 cursor-pointer"
                 />
               </div>
             ))}
@@ -98,9 +99,9 @@ const TrustedBrandsSection = () => {
                 <Image 
                   src={`/logos/${logo}`} 
                   alt="Brand Logo" 
-                  width={200}
-                  height={80}
-                  className="h-8 md:h-12 w-auto max-w-none object-contain grayscale opacity-50 mix-blend-multiply hover:grayscale-0 hover:opacity-100 hover:scale-110 transition-all duration-300 cursor-pointer"
+                  width={300}
+                  height={120}
+                  className="h-12 md:h-16 lg:h-20 w-auto max-w-none object-contain grayscale opacity-50 mix-blend-multiply hover:grayscale-0 hover:opacity-100 hover:scale-110 transition-all duration-300 cursor-pointer"
                 />
               </div>
             ))}

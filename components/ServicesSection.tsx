@@ -119,7 +119,7 @@ export default function ServicesSection() {
 
             {/* Bottom Huge Label */}
             <div className="absolute bottom-6 left-6 z-20 pointer-events-none overflow-hidden pr-6">
-              <span className="block text-white/15 group-hover:text-white/25 font-heading font-black text-5xl lg:text-6xl uppercase tracking-tighter whitespace-nowrap transition-colors duration-500">
+              <span className="block text-white/15 group-hover:text-white/25 font-heading font-black text-4xl md:text-5xl lg:text-6xl uppercase tracking-tighter whitespace-nowrap transition-colors duration-500">
                 {service.label}
               </span>
             </div>
