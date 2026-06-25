@@ -247,10 +247,10 @@ const Footer = () => {
           >
             <button 
               onClick={() => setIsModalOpen(true)}
-              className="w-[60px] h-[60px] md:w-[70px] md:h-[70px] lg:w-[86px] lg:h-[86px] bg-[#1d3f9e] rounded-full flex flex-col items-center justify-center text-white font-[900] text-[11px] md:text-[13px] leading-[1.1] text-center shadow-xl hover:scale-105 transition-transform"
+              className="w-[70px] h-[70px] md:w-[86px] md:h-[86px] lg:w-[100px] lg:h-[100px] bg-[#1d3f9e] rounded-full flex flex-col items-center justify-center text-white font-black text-[12px] md:text-[14px] lg:text-[15px] leading-tight text-center shadow-[0_8px_30px_rgba(29,63,158,0.4)] hover:shadow-[0_12px_40px_rgba(29,63,158,0.6)] hover:bg-[#163399] hover:scale-110 transition-all duration-300"
             >
-              <span>LET&apos;S</span>
-              <span>PLAN!</span>
+              <span className="tracking-wider ml-1">LET&apos;S</span>
+              <span className="tracking-wider">PLAN!</span>
             </button>
           </motion.div>
         </motion.div>

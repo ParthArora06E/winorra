@@ -226,7 +226,7 @@ const Globe = () => {
 // --- Main Exported Component ---
 const GlobalNetwork = () => {
   return (
-    <section className="relative w-full min-h-[860px] md:min-h-[920px] bg-[#f0f0f0] overflow-hidden flex flex-col items-center">
+    <section className="relative w-full min-h-screen bg-[#f0f0f0] overflow-hidden flex flex-col items-center">
       
       {/* Background Radial Light */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.04),transparent_55%)] pointer-events-none" />
@@ -250,11 +250,11 @@ const GlobalNetwork = () => {
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
-        className="relative w-full max-w-[1200px] h-[330px] md:h-[520px] lg:h-[680px] mt-10 md:mt-[60px] z-10 flex-1 flex items-center justify-center mb-[60px]"
+        className="relative w-full max-w-[1600px] h-[50vh] md:h-[65vh] mt-8 z-10 flex items-center justify-center mb-10"
       >
         <Canvas 
-          key="globe-canvas-v2"
-          camera={{ position: [0, 0, 11], fov: 35 }}
+          key="globe-canvas-v8"
+          camera={{ position: [0, 0, 14], fov: 42 }}
           className="w-full h-full cursor-grab active:cursor-grabbing"
           dpr={[1, 2]}
         >
