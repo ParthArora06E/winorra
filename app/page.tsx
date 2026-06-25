@@ -4,6 +4,7 @@ import TrustedBrandsSection from "@/components/TrustedBrandsSection";
 import CustomEditorialSection from "@/components/CustomEditorialSection";
 import AboutHeroSection from "@/components/AboutHeroSection";
 import ServicesSection from "@/components/ServicesSection";
+import UpcomingEventsSection from "@/components/UpcomingEventsSection";
 import dynamic from "next/dynamic";
 
 const GlobalNetwork = dynamic(() => import("@/components/GlobalNetwork"), { ssr: false });
@@ -20,6 +21,7 @@ export default function Home() {
         <CustomEditorialSection />
         <AboutHeroSection />
         <ServicesSection />
+        <UpcomingEventsSection />
         <GlobalNetwork />
         <TrustedBrandsSection />
       </div>

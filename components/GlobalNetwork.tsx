@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useRef, Suspense, useEffect, useState } from "react";
+import React, { useRef, Suspense, useEffect, useState, useMemo } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { OrbitControls, Html, Text } from "@react-three/drei";
+import { OrbitControls, Html } from "@react-three/drei";
 import * as THREE from "three";
 import { motion } from "framer-motion";
 import * as d3 from "d3-geo";
@@ -19,7 +19,7 @@ const MARKERS = [
 // Helper to convert lat/lng to 3D sphere coordinates
 const get3DCoordinates = (lng: number, lat: number, radius: number) => {
   const phi = (90 - lat) * (Math.PI / 180);
-  const theta = lng * (Math.PI / 180); // Exact match for SphereGeometry UVs
+  const theta = lng * (Math.PI / 180); 
 
   const x = radius * Math.sin(phi) * Math.cos(theta);
   const z = -radius * Math.sin(phi) * Math.sin(theta);
@@ -52,33 +52,86 @@ const isHighlighted = (name: string) => {
   return HIGHLIGHTED_COUNTRIES.includes(upper) || EUROPEAN_COUNTRIES.includes(upper);
 };
 
-const MANUAL_CENTERS: Record<string, [number, number]> = {
-  "UNITED STATES OF AMERICA": [-98.5795, 39.8283], // mainland center
-  "UNITED ARAB EMIRATES": [53.8478, 23.4241],
-  "INDIA": [78.9629, 20.5937],
-  "CHINA": [104.1954, 35.8617],
-  "RUSSIA": [100.3188, 61.5240],
-  "FRANCE": [2.2137, 46.2276], // exclude overseas territories
+// --- Sub-Components: Markers & Arcs ---
+
+const Marker = ({ name, coords, radius, globeMeshRef }: { name: string, coords: number[], radius: number, globeMeshRef: React.RefObject<THREE.Mesh> }) => {
+  const pos = useMemo(() => get3DCoordinates(coords[0], coords[1], radius), [coords, radius]);
+  const normal = useMemo(() => pos.clone().normalize(), [pos]);
+  const lookAtTarget = useMemo(() => pos.clone().add(normal), [pos, normal]);
+
+  const ringRef = useRef<THREE.Mesh>(null);
+  const ringRef2 = useRef<THREE.Mesh>(null);
+
+  useFrame(({ clock }) => {
+    const t = clock.getElapsedTime() * 1.5;
+    if (ringRef.current) {
+      const scale = 1 + (t % 2) * 2;
+      ringRef.current.scale.setScalar(scale);
+      (ringRef.current.material as THREE.Material).opacity = Math.max(0, 1 - (t % 2));
+    }
+    if (ringRef2.current) {
+      const t2 = t + 1;
+      const scale = 1 + (t2 % 2) * 2;
+      ringRef2.current.scale.setScalar(scale);
+      (ringRef2.current.material as THREE.Material).opacity = Math.max(0, 1 - (t2 % 2));
+    }
+  });
+
+  return (
+    <group position={pos}>
+      <mesh onUpdate={(m) => m.lookAt(lookAtTarget)}>
+        <circleGeometry args={[0.08, 32]} />
+        <meshBasicMaterial color="#8cc63f" side={THREE.DoubleSide} />
+      </mesh>
+      
+      <mesh ref={ringRef} onUpdate={(m) => m.lookAt(lookAtTarget)}>
+        <ringGeometry args={[0.08, 0.14, 32]} />
+        <meshBasicMaterial color="#8cc63f" transparent opacity={1} side={THREE.DoubleSide} />
+      </mesh>
+      <mesh ref={ringRef2} onUpdate={(m) => m.lookAt(lookAtTarget)}>
+        <ringGeometry args={[0.08, 0.14, 32]} />
+        <meshBasicMaterial color="#8cc63f" transparent opacity={1} side={THREE.DoubleSide} />
+      </mesh>
+
+      <Html distanceFactor={15} center occlude={[globeMeshRef]} zIndexRange={[100, 0]}>
+        <div className="bg-black/60 backdrop-blur-md px-2 py-0.5 rounded-full shadow-lg text-[7px] font-[800] uppercase tracking-[0.15em] text-white border border-white/20 whitespace-nowrap mt-4 pointer-events-none flex items-center gap-1 transition-transform">
+          <div className="w-[3px] h-[3px] rounded-full bg-[#8cc63f] shadow-[0_0_3px_#8cc63f] animate-pulse"></div>
+          {name}
+        </div>
+      </Html>
+    </group>
+  );
 };
 
-const DISPLAY_NAMES: Record<string, string> = {
-  "UNITED STATES OF AMERICA": "USA",
-  "UNITED ARAB EMIRATES": "UAE",
-  "UNITED KINGDOM": "UK",
+const Arc = ({ start, end, radius }: { start: number[], end: number[], radius: number }) => {
+  const curve = useMemo(() => {
+    const vStart = get3DCoordinates(start[0], start[1], radius);
+    const vEnd = get3DCoordinates(end[0], end[1], radius);
+    const distance = vStart.distanceTo(vEnd);
+    const vMid = vStart.clone().lerp(vEnd, 0.5);
+    vMid.normalize().multiplyScalar(radius + distance * 0.35); 
+    return new THREE.QuadraticBezierCurve3(vStart, vMid, vEnd);
+  }, [start, end, radius]);
+
+  return (
+    <mesh>
+      <tubeGeometry args={[curve, 44, 0.015, 8, false]} />
+      <meshBasicMaterial color="#8cc63f" transparent opacity={0.35} />
+    </mesh>
+  );
 };
 
 // --- Sub-Component: Globe Scene ---
 const Globe = () => {
   const globeRef = useRef<THREE.Group>(null);
-  const sphereRef = useRef<THREE.Mesh>(null);
+  const meshRef = useRef<THREE.Mesh>(null);
   const [globeTexture, setGlobeTexture] = useState<THREE.CanvasTexture | null>(null);
-  const [countryLabels, setCountryLabels] = useState<{name: string, coords: [number, number], isHigh: boolean}[]>([]);
   const { size } = useThree();
 
-  // Gentle rotation (increased speed)
+  // Gentle rotation
   useFrame(() => {
     if (globeRef.current) {
-      globeRef.current.rotation.y += 0.0015;
+      globeRef.current.rotation.y += 0.001; // Smooth sophisticated speed
     }
   });
 
@@ -95,12 +148,9 @@ const Globe = () => {
         const projection = d3.geoEquirectangular().translate([2048, 1024]).scale(651.8986);
         const path = d3.geoPath().projection(projection).context(context);
 
-        // Fill the entire canvas with the light blue-grey ocean color
-        context.fillStyle = "#dce4ed";
+        // Elegant light blue-grey ocean
+        context.fillStyle = "#eaf0f6";
         context.fillRect(0, 0, 4096, 2048);
-
-        const labels: {name: string, coords: [number, number], isHigh: boolean}[] = [];
-        
 
         data.features.forEach((feature: any) => {
           const name = feature.properties.name || feature.properties.ADMIN;
@@ -109,42 +159,15 @@ const Globe = () => {
           context.beginPath();
           path(feature);
           
-          // Highlighted countries get solid blue, others get pure white
+          // Crisp landmasses, vibrant brand blue highlights
           context.fillStyle = highlighted ? "#1a5ab5" : "#ffffff";
           context.fill();
 
-          // Thin crisp borders for all countries
-          context.strokeStyle = "#b5bcc5";
-          context.lineWidth = 1;
+          // Refined borders
+          context.strokeStyle = highlighted ? "#124285" : "#d1d9e6";
+          context.lineWidth = highlighted ? 2 : 1;
           context.stroke();
-
-          // Collect country names for labels
-          if (name && name !== "Antarctica") {
-            const upperName = name.toUpperCase();
-            const bounds = path.bounds(feature);
-            if (bounds && bounds[0] && bounds[1] && !isNaN(bounds[0][0])) {
-              const w = bounds[1][0] - bounds[0][0];
-              const h = bounds[1][1] - bounds[0][1];
-              
-              // Always label highlighted countries, or large countries
-              if (highlighted || w * h > 1500) {
-                let centerCoords: [number, number];
-                if (MANUAL_CENTERS[upperName]) {
-                  centerCoords = MANUAL_CENTERS[upperName];
-                } else {
-                  const centroid = d3.geoCentroid(feature);
-                  centerCoords = [centroid[0], centroid[1]];
-                }
-                
-                const displayName = DISPLAY_NAMES[upperName] || upperName;
-                
-                labels.push({ name: displayName, coords: centerCoords, isHigh: highlighted });
-              }
-            }
-          }
         });
-        
-        setCountryLabels(labels);
 
         const texture = new THREE.CanvasTexture(canvas);
         texture.colorSpace = THREE.SRGBColorSpace;
@@ -155,52 +178,47 @@ const Globe = () => {
   }, []);
 
   const scale = size.width < 768 ? (size.width < 400 ? 0.6 : 0.75) : 1;
+  const radius = 5;
+
+  // Define network connections
+  const ARCS = useMemo(() => [
+    { start: MARKERS.find(m => m.name === "UAE")!.coords, end: MARKERS.find(m => m.name === "USA")!.coords },
+    { start: MARKERS.find(m => m.name === "UAE")!.coords, end: MARKERS.find(m => m.name === "EUROPE")!.coords },
+    { start: MARKERS.find(m => m.name === "UAE")!.coords, end: MARKERS.find(m => m.name === "INDIA")!.coords },
+    { start: MARKERS.find(m => m.name === "UAE")!.coords, end: MARKERS.find(m => m.name === "CHINA")!.coords },
+    { start: MARKERS.find(m => m.name === "USA")!.coords, end: MARKERS.find(m => m.name === "EUROPE")!.coords },
+    { start: MARKERS.find(m => m.name === "INDIA")!.coords, end: MARKERS.find(m => m.name === "CHINA")!.coords },
+    { start: MARKERS.find(m => m.name === "CHINA")!.coords, end: MARKERS.find(m => m.name === "RUSSIA")!.coords },
+    { start: MARKERS.find(m => m.name === "EUROPE")!.coords, end: MARKERS.find(m => m.name === "RUSSIA")!.coords },
+  ], []);
 
   return (
     <group ref={globeRef} rotation={[0, -Math.PI / 2, 0]} scale={scale}>
-      {/* Main Globe */}
+
+
+      {/* Main Vector Globe */}
       {globeTexture && (
-        <mesh>
-          <sphereGeometry args={[5, 64, 64]} />
-          <meshStandardMaterial 
+        <mesh ref={meshRef}>
+          <sphereGeometry args={[radius, 128, 128]} />
+          <meshPhysicalMaterial 
             map={globeTexture}
-            roughness={1}
-            metalness={0}
+            roughness={0.4}
+            metalness={0.1}
+            clearcoat={0.2}
+            clearcoatRoughness={0.3}
           />
         </mesh>
       )}
 
+      {/* Interactive Markers */}
+      {globeTexture && MARKERS.map((marker, i) => (
+        <Marker key={`marker-${i}`} name={marker.name} coords={marker.coords} radius={radius} globeMeshRef={meshRef} />
+      ))}
 
-      {/* WebGL Country Labels (Subtle & Performant) */}
-      {countryLabels.map((label, index) => {
-        
-        const pos = get3DCoordinates(label.coords[0], label.coords[1], 5.02);
-        
-        // Make text face outward from the sphere and stay perfectly upright
-        const dummy = new THREE.Object3D();
-        dummy.position.copy(pos);
-        // Object3D.lookAt makes the +Z axis (the front of the Text) point towards the target.
-        // By pointing it outward, the text faces the camera correctly without being mirrored.
-        dummy.lookAt(pos.clone().multiplyScalar(2));
-
-        return (
-          <Text
-            key={`lbl-${index}`}
-            position={pos}
-            quaternion={dummy.quaternion}
-            color={label.isHigh ? "#ffffff" : "#333333"}
-            fontSize={label.isHigh ? 0.085 : 0.06}
-            letterSpacing={0.1}
-            anchorX="center"
-            anchorY="middle"
-            fontWeight="bold"
-            outlineWidth={0.0015}
-            outlineColor={label.isHigh ? "#ffffff" : "#333333"}
-          >
-            {label.name}
-          </Text>
-        );
-      })}
+      {/* Glowing Connections */}
+      {globeTexture && ARCS.map((arc, i) => (
+        <Arc key={`arc-${i}`} start={arc.start} end={arc.end} radius={radius} />
+      ))}
     </group>
   );
 };
@@ -208,12 +226,12 @@ const Globe = () => {
 // --- Main Exported Component ---
 const GlobalNetwork = () => {
   return (
-    <section className="relative w-full min-h-[860px] md:h-[920px] bg-[#f0f0f0] overflow-hidden flex flex-col items-center">
+    <section className="relative w-full min-h-[860px] md:min-h-[920px] bg-[#f0f0f0] overflow-hidden flex flex-col items-center">
       
       {/* Background Radial Light */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.04),transparent_55%)] pointer-events-none" />
 
-      {/* Heading Area (y=70px approx via padding/margin) */}
+      {/* Heading Area */}
       <motion.div 
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -221,10 +239,9 @@ const GlobalNetwork = () => {
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="w-full z-20 text-center pt-[70px] px-4 flex flex-col items-center"
       >
-
-        <p className="text-[#b69238] tracking-[5px] md:tracking-[10px] text-[10px] md:text-[12px] uppercase font-extrabold mt-[12px]">
-          Crafting Experiences Beyond Borders
-        </p>
+        <h2 className="font-heading font-black text-black text-3xl md:text-5xl lg:text-6xl uppercase tracking-tighter mt-[12px] max-w-6xl mx-auto drop-shadow-sm">
+          CRAFTING EXPERIENCES BEYOND BORDERS
+        </h2>
       </motion.div>
 
       {/* 3D Globe Container */}
@@ -236,14 +253,15 @@ const GlobalNetwork = () => {
         className="relative w-full max-w-[1200px] h-[330px] md:h-[520px] lg:h-[680px] mt-10 md:mt-[60px] z-10 flex-1 flex items-center justify-center mb-[60px]"
       >
         <Canvas 
-          camera={{ position: [0, 0, 13], fov: 45 }}
+          camera={{ position: [0, 0, 15], fov: 45 }}
           className="w-full h-full cursor-grab active:cursor-grabbing"
           dpr={[1, 2]}
         >
           <ambientLight intensity={1.2} />
-          {/* Subtle rim light / highlight */}
+          {/* Enhanced lighting for physical material */}
           <directionalLight position={[10, 10, 5]} intensity={1.5} color="#ffffff" />
-          <directionalLight position={[-10, -10, -5]} intensity={0.5} color="#e0e0e0" />
+          <directionalLight position={[-10, -10, -5]} intensity={0.8} color="#e0e0e0" />
+          <pointLight position={[0, 15, 0]} intensity={0.5} />
           
           <Suspense fallback={null}>
             <Globe />
@@ -255,6 +273,8 @@ const GlobalNetwork = () => {
             minPolarAngle={Math.PI / 3} 
             maxPolarAngle={Math.PI / 1.5} 
             rotateSpeed={0.6}
+            autoRotate
+            autoRotateSpeed={0.5}
           />
         </Canvas>
 

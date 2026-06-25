@@ -80,7 +80,7 @@ const services = [
 
 export default function ServicesSection() {
   return (
-    <section className="relative w-full bg-white text-black py-12 lg:py-32 px-6 lg:px-12 xl:px-20 overflow-hidden">
+    <section id="services" className="relative w-full bg-white text-black py-12 lg:py-32 px-6 lg:px-12 xl:px-20 overflow-hidden">
       
       {/* Section Header */}
       <div className="max-w-5xl mx-auto text-center mb-24">

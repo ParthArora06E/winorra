@@ -59,6 +59,7 @@ html, body {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
   caret-color: transparent; /* Hides accidental text cursors */
+  scroll-behavior: smooth; /* Enables smooth native scrolling for anchor links */
 }
 
 /* Typography Scale */

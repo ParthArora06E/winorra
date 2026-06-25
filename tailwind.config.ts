@@ -29,6 +29,7 @@ const config: Config = {
         "float-fast": "float 5s ease-in-out infinite",
         "pulse-slow": "pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         "noise": "noise 0.2s infinite",
+        "marquee": "marquee 20s linear infinite",
       },
       keyframes: {
         float: {
@@ -48,6 +49,10 @@ const config: Config = {
           "70%": { transform: "translate(0, 10%)" },
           "80%": { transform: "translate(-15%, 0)" },
           "90%": { transform: "translate(10%, 5%)" },
+        },
+        marquee: {
+          "0%": { transform: "translateX(0%)" },
+          "100%": { transform: "translateX(-100%)" },
         },
       },
     },

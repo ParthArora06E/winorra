@@ -9,12 +9,53 @@ import { usePathname } from "next/navigation";
 const Footer = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [notification, setNotification] = useState<{message: string, type: 'success' | 'error'} | null>(null);
   const pathname = usePathname();
   const bgColor = pathname === '/' ? '#d3d6da' : 'transparent';
 
+  const showNotification = (message: string, type: 'success' | 'error') => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 5000);
+  };
+
+  const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    const form = e.currentTarget;
+    const formData = new FormData();
+    formData.append('type', 'contact');
+    formData.append('name', (form.elements.namedItem('name') as HTMLInputElement).value);
+    formData.append('phone', (form.elements.namedItem('phone') as HTMLInputElement).value);
+    formData.append('email', (form.elements.namedItem('email') as HTMLInputElement).value);
+    formData.append('eventType', (form.elements.namedItem('eventType') as HTMLSelectElement).value);
+    formData.append('vision', (form.elements.namedItem('vision') as HTMLTextAreaElement).value);
+
+    try {
+      const res = await fetch('/api/send-email', {
+        method: 'POST',
+        body: formData,
+      });
+      
+      if (res.ok) {
+        showNotification('Message sent successfully! Our team will get back to you shortly.', 'success');
+        setIsModalOpen(false);
+        form.reset();
+      } else {
+        showNotification('Failed to send message. Please try again later.', 'error');
+      }
+    } catch (error) {
+      console.error(error);
+      showNotification('An error occurred. Please try again.', 'error');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <>
-      <footer className="w-full relative z-20 flex flex-col transition-colors duration-300" style={{ backgroundColor: bgColor }}>
+      <footer id="contact" className="w-full relative z-20 flex flex-col transition-colors duration-300" style={{ backgroundColor: bgColor }}>
         {/* PART 1: ROUNDED CTA PANEL */}
         <motion.div 
           initial={{ opacity: 0, y: 50 }}
@@ -256,29 +297,29 @@ const Footer = () => {
 
               {/* Form Body */}
               <div className="p-6 md:p-10">
-                <form className="flex flex-col gap-6">
+                <form onSubmit={handleContactSubmit} className="flex flex-col gap-6">
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="flex flex-col gap-2">
                       <label className="text-[12px] font-[800] text-gray-500 uppercase tracking-wider ml-1">Your Name *</label>
-                      <input type="text" placeholder="John Doe" className="w-full px-5 py-3.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-[#91bf3e] focus:ring-2 focus:ring-[#91bf3e]/20 text-gray-900 placeholder:text-gray-400 transition-all shadow-sm" required />
+                      <input type="text" name="name" placeholder="John Doe" className="w-full px-5 py-3.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-[#91bf3e] focus:ring-2 focus:ring-[#91bf3e]/20 text-gray-900 placeholder:text-gray-400 transition-all shadow-sm" required />
                     </div>
                     
                     <div className="flex flex-col gap-2">
                       <label className="text-[12px] font-[800] text-gray-500 uppercase tracking-wider ml-1">Phone Number</label>
-                      <input type="tel" placeholder="+1 (555) 000-0000" className="w-full px-5 py-3.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-[#91bf3e] focus:ring-2 focus:ring-[#91bf3e]/20 text-gray-900 placeholder:text-gray-400 transition-all shadow-sm" />
+                      <input type="tel" name="phone" placeholder="+1 (555) 000-0000" className="w-full px-5 py-3.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-[#91bf3e] focus:ring-2 focus:ring-[#91bf3e]/20 text-gray-900 placeholder:text-gray-400 transition-all shadow-sm" />
                     </div>
                   </div>
 
                   <div className="flex flex-col gap-2">
                     <label className="text-[12px] font-[800] text-gray-500 uppercase tracking-wider ml-1">Your Email *</label>
-                    <input type="email" placeholder="john@company.com" className="w-full px-5 py-3.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-[#91bf3e] focus:ring-2 focus:ring-[#91bf3e]/20 text-gray-900 placeholder:text-gray-400 transition-all shadow-sm" required />
+                    <input type="email" name="email" placeholder="john@company.com" className="w-full px-5 py-3.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-[#91bf3e] focus:ring-2 focus:ring-[#91bf3e]/20 text-gray-900 placeholder:text-gray-400 transition-all shadow-sm" required />
                   </div>
 
                   <div className="flex flex-col gap-2">
                     <label className="text-[12px] font-[800] text-gray-500 uppercase tracking-wider ml-1">Event Type</label>
                     <div className="relative">
-                      <select defaultValue="" className="w-full px-5 py-3.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-[#91bf3e] focus:ring-2 focus:ring-[#91bf3e]/20 text-gray-900 appearance-none transition-all shadow-sm font-medium cursor-pointer">
+                      <select name="eventType" defaultValue="" className="w-full px-5 py-3.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-[#91bf3e] focus:ring-2 focus:ring-[#91bf3e]/20 text-gray-900 appearance-none transition-all shadow-sm font-medium cursor-pointer">
                         <option value="" disabled>Select the type of event...</option>
                         <option value="mice">MICE</option>
                         <option value="corporate">Corporate Events</option>
@@ -294,6 +335,7 @@ const Footer = () => {
                   <div className="flex flex-col gap-2">
                     <label className="text-[12px] font-[800] text-gray-500 uppercase tracking-wider ml-1">Event Vision *</label>
                     <textarea 
+                      name="vision"
                       rows={3} 
                       placeholder="Tell us about your goals, audience size, and any special requirements..." 
                       className="w-full px-5 py-4 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-[#91bf3e] focus:ring-2 focus:ring-[#91bf3e]/20 text-gray-900 resize-none placeholder:text-gray-400 transition-all shadow-sm leading-relaxed"
@@ -303,11 +345,12 @@ const Footer = () => {
 
                   <button 
                     type="submit" 
-                    className="w-full bg-gradient-to-r from-[#91bf3e] to-[#7fa836] text-white font-[800] tracking-[1px] uppercase text-[15px] py-4 rounded-xl mt-4 hover:shadow-[0_10px_25px_rgba(145,191,62,0.4)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3 relative overflow-hidden group"
+                    className="w-full bg-gradient-to-r from-[#91bf3e] to-[#7fa836] text-white font-[800] tracking-[1px] uppercase text-[15px] py-4 rounded-xl mt-4 hover:shadow-[0_10px_25px_rgba(145,191,62,0.4)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3 relative overflow-hidden group disabled:opacity-70 disabled:cursor-not-allowed"
+                    disabled={isSubmitting}
                   >
                     <span className="relative z-10 flex items-center gap-2">
-                      Send Details
-                      <svg className="group-hover:translate-x-1 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                      {isSubmitting ? 'Sending...' : 'Send Details'}
+                      {!isSubmitting && <svg className="group-hover:translate-x-1 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>}
                     </span>
                     {/* Button shine effect */}
                     <div className="absolute inset-0 -translate-x-[150%] skew-x-[-20deg] group-hover:translate-x-[150%] transition-transform duration-700 ease-in-out bg-gradient-to-r from-transparent via-white/20 to-transparent z-0"></div>
@@ -436,6 +479,36 @@ const Footer = () => {
               </div>
             </motion.div>
           </div>
+        )}
+      </AnimatePresence>
+
+      {/* Toast Notification */}
+      <AnimatePresence>
+        {notification && (
+          <motion.div
+            initial={{ opacity: 0, y: 40, x: "-50%" }}
+            animate={{ opacity: 1, y: 0, x: "-50%" }}
+            exit={{ opacity: 0, y: 20, x: "-50%" }}
+            className={`fixed bottom-10 left-1/2 z-[200] flex items-center gap-3 px-5 py-4 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.2)] border ${
+              notification.type === 'success' 
+                ? 'bg-white border-green-100 text-gray-800' 
+                : 'bg-white border-red-100 text-gray-800'
+            }`}
+          >
+            {notification.type === 'success' ? (
+              <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </div>
+            ) : (
+              <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+              </div>
+            )}
+            <span className="font-semibold text-sm">{notification.message}</span>
+            <button onClick={() => setNotification(null)} className="ml-2 text-gray-400 hover:text-gray-600 transition-colors">
+              <X size={16} strokeWidth={2.5} />
+            </button>
+          </motion.div>
         )}
       </AnimatePresence>
     </>

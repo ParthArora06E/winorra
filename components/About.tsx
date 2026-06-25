@@ -72,8 +72,14 @@ const About = () => {
             transition={{ delay: 0.8, duration: 1 }}
             className="text-[12px] md:text-[14px] tracking-[0.4em] font-bold text-white uppercase mt-8 drop-shadow-md"
           >
-            Experience Creators <span className="mx-4 text-white/50">{"//"}</span> Festival Producers
+            EXPERIENCE CREATORS <span className="mx-4 text-[#8cc63f]">{"//"}</span> <span className="text-[#8cc63f]">EVENT PRODUCERS</span>
           </motion.p>
+          <motion.div
+            initial={{ scaleX: 0, opacity: 0 }}
+            whileInView={{ scaleX: 1, opacity: 1 }}
+            transition={{ delay: 1, duration: 0.8 }}
+            className="w-16 h-[2px] bg-[#8cc63f] mx-auto mt-6 mb-2 origin-center"
+          />
         </motion.div>
 
         {/* Paragraph */}
@@ -92,7 +98,7 @@ const About = () => {
             }
           }}
         >
-          {"Fathom Producers is a full-spectrum production powerhouse that creates, promotes, and produces world-class events, festivals, and live concerts. Known for crafting powerful brands, our creative energy drives the passion we have for producing amazing experiences that we can share with the world.".split(" ").map((word, i) => (
+          {"WINORAA GLOBAL is a full-spectrum production powerhouse that creates, promotes, and produces world-class events, exhibitions, and live experiences. Known for crafting powerful brand moments, our creative energy drives the passion we have for producing amazing experiences that we can share with the world.".split(" ").map((word, i) => (
             <motion.span
               key={i}
               className="inline-block mr-1.5"
@@ -102,7 +108,7 @@ const About = () => {
               }}
               transition={{ duration: 0.6 }}
             >
-              {word === "Fathom" || word === "Producers" ? (
+              {word === "WINORAA" || word === "GLOBAL" ? (
                 <strong className="text-white font-extrabold">{word}</strong>
               ) : (
                 word

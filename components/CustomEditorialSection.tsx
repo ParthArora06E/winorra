@@ -4,7 +4,7 @@ import React from "react";
 
 export default function CustomEditorialSection() {
   return (
-    <section className="relative z-20 w-full bg-white text-black min-h-screen lg:min-h-[900px] overflow-hidden flex items-center">
+    <section id="about" className="relative z-20 w-full bg-white text-black min-h-screen lg:min-h-[900px] overflow-hidden flex items-center">
       
       <div className="w-full max-w-[1800px] mx-auto px-6 lg:px-12 xl:px-[95px] py-20 flex flex-col lg:flex-row justify-between items-center gap-16 lg:gap-12">
         
