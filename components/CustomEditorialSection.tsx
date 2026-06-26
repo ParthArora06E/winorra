@@ -81,7 +81,7 @@ export default function CustomEditorialSection() {
             </h2>
             <p className="font-sans text-[14.5px] leading-[1.55] text-black/85 font-medium">
               Festival Haus, our Flagship Music and Entertainment brand, is where some of our biggest moments
-              happen. The Fathom // Festival Haus Studio develops, promotes, and produces large-scale Live Concerts and
+              happen. The Winorra Global // Festival Haus Studio develops, promotes, and produces large-scale Live Concerts and
               Music Festival events, in-house. Our passion for music runs deep, and from concept-to-show, we
               strategically develop and execute to produce incredible mega-events that bring together thousands.
             </p>
@@ -121,10 +121,10 @@ export default function CustomEditorialSection() {
               Innovating guest experience and the technology<br/>that powers it.
             </h2>
             <p className="font-sans text-[14.5px] leading-[1.55] text-black/85 font-medium">
-              Our craft is where the the arts converge with technology. The Fathom Labs team is at the core of
+              Our craft is where the the arts converge with technology. The Winorra Global Labs team is at the core of
               our research, technology development, and innovation pipeline that shapes how we operate. Our
               proprietary technology systems allow us to be agile, flexible, move swiftly and launch rapidly.
-              Fathom has the ability to deploy experiences and brands from the ground-up; faster and better
+              Winorra Global has the ability to deploy experiences and brands from the ground-up; faster and better
               than any other production company.
             </p>
           </div>
