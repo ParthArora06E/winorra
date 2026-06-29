@@ -80,7 +80,7 @@ export default function CustomEditorialSection() {
               Innovative Stall Designing &<br/>Premium Fabrication.
             </h2>
             <p className="font-sans text-[14.5px] leading-[1.55] text-black/85 font-medium">
-              Your brand's physical presence speaks volumes. At Winoraa Global, we conceptualize and build custom exhibition stalls that captivate and engage. From the initial 3D design to the final on-site fabrication, we use premium materials and cutting-edge techniques to ensure your booth stands out and effectively communicates your brand's unique story.
+              Your brand&apos;s physical presence speaks volumes. At Winoraa Global, we conceptualize and build custom exhibition stalls that captivate and engage. From the initial 3D design to the final on-site fabrication, we use premium materials and cutting-edge techniques to ensure your booth stands out and effectively communicates your brand&apos;s unique story.
             </p>
           </div>
 
@@ -90,7 +90,7 @@ export default function CustomEditorialSection() {
               Spectacular Stage Designing.
             </h2>
             <p className="font-sans text-[14.5px] leading-[1.55] text-black/85 font-medium">
-              The stage is where the magic happens. We design immersive and technically advanced stage setups that elevate any event. Whether it's an intimate corporate gathering or a massive award ceremony, our stage designs integrate state-of-the-art lighting, AV production, and dynamic structures to create an unforgettable focal point that leaves audiences in awe.
+              The stage is where the magic happens. We design immersive and technically advanced stage setups that elevate any event. Whether it&apos;s an intimate corporate gathering or a massive award ceremony, our stage designs integrate state-of-the-art lighting, AV production, and dynamic structures to create an unforgettable focal point that leaves audiences in awe.
             </p>
           </div>
 
@@ -100,7 +100,7 @@ export default function CustomEditorialSection() {
               Flawlessly Executed<br/>Corporate Shows.
             </h2>
             <p className="font-sans text-[14.5px] leading-[1.55] text-black/85 font-medium">
-              We understand that corporate events are a reflection of your company's excellence. Winoraa Global provides end-to-end production for corporate shows, dealer meets, and galas. We handle the logistics, aesthetics, and technical execution with military precision, ensuring a seamless experience that impresses your stakeholders and achieves your business objectives.
+              We understand that corporate events are a reflection of your company&apos;s excellence. Winoraa Global provides end-to-end production for corporate shows, dealer meets, and galas. We handle the logistics, aesthetics, and technical execution with military precision, ensuring a seamless experience that impresses your stakeholders and achieves your business objectives.
             </p>
           </div>
 
